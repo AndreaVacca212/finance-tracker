@@ -1,0 +1,56 @@
+.accounts-page {
+  max-width: 900px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 { margin: 0; font-size: 24px; font-weight: 600; }
+}
+
+.summary-card {
+  background: #1e293b;
+  color: white;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  strong { font-size: 28px; color: #60a5fa; }
+}
+
+.accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.account-card {
+  border-radius: 12px !important;
+
+  .balance {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 12px;
+  }
+
+  .iban {
+    font-size: 12px;
+    color: #94a3b8;
+    font-family: monospace;
+  }
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.error { color: red; }

@@ -1,0 +1,42 @@
+<div class="accounts-page">
+  <div class="page-header">
+    <h1>I tuoi conti</h1>
+    <button mat-fab extended color="primary">
+      <mat-icon>add</mat-icon>
+      Aggiungi conto
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="center">
+      <mat-spinner />
+    </div>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+    <div class="summary-card">
+      <span>Saldo totale</span>
+      <strong>{{ totalBalance() | currency:'EUR':'symbol':'1.2-2':'it' }}</strong>
+    </div>
+
+    <div class="accounts-grid">
+      @for (account of accounts(); track account.id) {
+        <mat-card class="account-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>account_balance</mat-icon>
+            <mat-card-title>{{ account.name }}</mat-card-title>
+            <mat-card-subtitle>{{ account.bankName ?? 'Banca non specificata' }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="balance">{{ account.balance | currency:'EUR':'symbol':'1.2-2':'it' }}</p>
+            @if (account.iban) {
+              <p class="iban">{{ account.iban }}</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      } @empty {
+        <p>Nessun conto trovato. Aggiungine uno!</p>
+      }
+    </div>
+  }
+</div>
