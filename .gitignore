@@ -88,6 +88,17 @@ project.fragment.lock.json
 artifacts/
 .artifacts/
 
+# .NET
+*.user
+.vs/
+**/bin/
+**/obj/
+
+# Angular
+node_modules/
+dist/
+EOF
+
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
