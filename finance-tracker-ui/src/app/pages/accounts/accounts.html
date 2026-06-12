@@ -33,6 +33,17 @@
               <p class="iban">{{ account.iban }}</p>
             }
           </mat-card-content>
+           <mat-card-actions align="end">
+            <button mat-icon-button color="warn"
+              [disabled]="deletingId() === account.id"
+              (click)="deleteAccount(account)">
+              @if (deletingId() === account.id) {
+                <mat-spinner diameter="20" />
+              } @else {
+                <mat-icon>delete</mat-icon>
+              }
+            </button>
+          </mat-card-actions>
         </mat-card>
       } @empty {
         <p>Nessun conto trovato. Aggiungine uno!</p>
