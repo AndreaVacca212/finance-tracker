@@ -58,3 +58,9 @@
 mat-card-actions {
   padding: 0 8px 8px !important;
 }
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}

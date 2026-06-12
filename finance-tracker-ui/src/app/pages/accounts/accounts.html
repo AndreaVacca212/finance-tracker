@@ -1,11 +1,21 @@
 <div class="accounts-page">
-  <div class="page-header">
-    <h1>I tuoi conti</h1>
-<button mat-fab extended color="primary" (click)="openAddDialog()">
+<div class="page-header">
+  <h1>I tuoi conti</h1>
+  <div class="header-actions">
+    <button mat-fab extended color="accent" (click)="connectBank()" [disabled]="connectingBank()">
+      @if (connectingBank()) {
+        <mat-spinner diameter="20" />
+      } @else {
+        <mat-icon>account_balance</mat-icon>
+      }
+      Connetti banca
+    </button>
+    <button mat-fab extended color="primary" (click)="openAddDialog()">
       <mat-icon>add</mat-icon>
       Aggiungi conto
     </button>
   </div>
+</div>
 
   @if (loading()) {
     <div class="center">
