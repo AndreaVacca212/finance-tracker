@@ -443,4 +443,4 @@ SESSION_*
 # Secrets
 **/appsettings.Development.json
 **/appsettings.*.json
-!**/appsettings.json
+!**/appsettings.jsonsrc/FinanceTracker.Api/appsettings.Development.json
