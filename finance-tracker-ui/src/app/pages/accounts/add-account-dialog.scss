@@ -1,0 +1,23 @@
+.full-width { width: 100%; }
+
+.row {
+  display: flex;
+  gap: 12px;
+
+  .balance-field { flex: 2; }
+  .currency-field { flex: 1; }
+}
+
+.error-msg {
+  color: var(--mat-sys-error);
+  font-size: 0.85rem;
+  margin-top: -8px;
+}
+
+mat-dialog-content {
+  min-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px !important;
+}

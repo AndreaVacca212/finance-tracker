@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>Aggiungi conto</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" id="addAccountForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome conto *</mat-label>
+      <input matInput formControlName="name" placeholder="Es. Conto Corrente Fineco" />
+      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+        <mat-error>Il nome è obbligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Banca</mat-label>
+      <input matInput formControlName="bankName" placeholder="Es. Fineco, Intesa, N26" />
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="balance-field">
+        <mat-label>Saldo iniziale *</mat-label>
+        <input matInput type="number" formControlName="balance" min="0" step="0.01" />
+        @if (form.get('balance')?.hasError('min')) {
+          <mat-error>Il saldo non può essere negativo</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="currency-field">
+        <mat-label>Valuta</mat-label>
+        <mat-select formControlName="currency">
+          @for (c of currencies; track c) {
+            <mat-option [value]="c">{{ c }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>IBAN</mat-label>
+      <input matInput formControlName="iban" placeholder="Es. IT60X0542811101000000123456" />
+      @if (form.get('iban')?.hasError('pattern') && form.get('iban')?.touched) {
+        <mat-error>Formato IBAN non valido</mat-error>
+      }
+      <mat-hint>Opzionale — utile per il collegamento Open Banking</mat-hint>
+    </mat-form-field>
+
+    @if (error) {
+      <p class="error-msg">{{ error }}</p>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annulla</button>
+  <button
+    mat-flat-button
+    color="primary"
+    form="addAccountForm"
+    type="submit"
+    [disabled]="form.invalid || saving">
+    @if (saving) {
+      <mat-spinner diameter="18" />
+    } @else {
+      Salva
+    }
+  </button>
+</mat-dialog-actions>
