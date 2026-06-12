@@ -11,6 +11,8 @@ public class Transaction
     public DateTime Date { get; set; }
     public string Currency { get; set; } = "EUR";
     public string? Notes { get; set; }
+    public string? ExternalAccountId { get; set; }
+    public string? ExternalId { get; set; }
 
     // Open Banking
     public string? ExternalTransactionId { get; set; }
