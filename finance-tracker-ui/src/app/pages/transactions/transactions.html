@@ -1,1 +1,98 @@
-<p>transactions works!</p>
+<div class="transactions-page">
+  <div class="page-header">
+    <h1>Transazioni</h1>
+    <button mat-fab extended color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+      Aggiungi
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="center"><mat-spinner /></div>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+
+    <!-- Filtri -->
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <mat-select [value]="filterType()" (selectionChange)="filterType.set($event.value)">
+          <mat-option value="All">Tutti</mat-option>
+          <mat-option value="Income">Entrate</mat-option>
+          <mat-option value="Expense">Uscite</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Conto</mat-label>
+        <mat-select [value]="filterAccountId()" (selectionChange)="filterAccountId.set($event.value)">
+          <mat-option value="">Tutti i conti</mat-option>
+          @for (acc of accounts(); track acc.id) {
+            <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Periodo</mat-label>
+        <mat-select [value]="filterMonth()" (selectionChange)="filterMonth.set($event.value )">
+          <mat-option value="">Tutti</mat-option>
+          @for (m of availableMonths(); track m) {
+            <mat-option [value]="m">{{ formatMonth(m) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button (click)="resetFilters()">
+        <mat-icon>filter_alt_off</mat-icon>
+        Reset
+      </button>
+    </div>
+
+    <!-- Sommario -->
+    <div class="summary-row">
+      <div class="summary-chip income">
+        <mat-icon>arrow_downward</mat-icon>
+        <span>{{ totalIncome() | currency:'EUR':'symbol':'1.2-2':'it' }}</span>
+      </div>
+      <div class="summary-chip expense">
+        <mat-icon>arrow_upward</mat-icon>
+        <span>{{ totalExpense() | currency:'EUR':'symbol':'1.2-2':'it' }}</span>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="transaction-list">
+      @for (t of filteredTransactions(); track t.id) {
+        <div class="transaction-row" [class.income]="t.type === 'Income'" [class.expense]="t.type === 'Expense'">
+          <div class="tx-icon">
+            <mat-icon>{{ t.type === 'Income' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
+          </div>
+          <div class="tx-info">
+            <span class="tx-description">{{ t.description }}</span>
+            <span class="tx-meta">
+              {{ t.date | date:'dd MMM yyyy':'':'it' }}
+              @if (t.account) { · {{ t.account.name }} }
+              @if (t.category) { · {{ t.category.name }} }
+            </span>
+          </div>
+          <div class="tx-amount">
+            {{ (t.type === 'Expense' ? -t.amount : t.amount) | currency:'EUR':'symbol':'1.2-2':'it' }}
+          </div>
+          <button mat-icon-button color="warn"
+            [disabled]="deletingId() === t.id"
+            (click)="deleteTransaction(t)">
+            @if (deletingId() === t.id) {
+              <mat-spinner diameter="20" />
+            } @else {
+              <mat-icon>delete</mat-icon>
+            }
+          </button>
+        </div>
+      } @empty {
+        <p class="empty">Nessuna transazione trovata.</p>
+      }
+    </div>
+  }
+</div>

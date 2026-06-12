@@ -1,0 +1,83 @@
+<h2 mat-dialog-title>Aggiungi transazione</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" id="addTxForm" (ngSubmit)="onSubmit()">
+
+    <!-- Tipo -->
+    <mat-radio-group formControlName="type" class="type-toggle">
+      <mat-radio-button value="Expense">🔴 Uscita</mat-radio-button>
+      <mat-radio-button value="Income">🟢 Entrata</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrizione *</mat-label>
+      <input matInput formControlName="description" placeholder="Es. Supermercato Esselunga" />
+      @if (form.get('description')?.hasError('required') && form.get('description')?.touched) {
+        <mat-error>La descrizione è obbligatoria</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="flex-2">
+        <mat-label>Importo *</mat-label>
+        <input matInput type="number" formControlName="amount" min="0.01" step="0.01" />
+        <span matTextPrefix>€&nbsp;</span>
+        @if (form.get('amount')?.hasError('min') && form.get('amount')?.touched) {
+          <mat-error>L'importo deve essere maggiore di 0</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="flex-2">
+        <mat-label>Data *</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Conto *</mat-label>
+      <mat-select formControlName="accountId">
+        @for (acc of accounts(); track acc.id) {
+          <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('accountId')?.hasError('required') && form.get('accountId')?.touched) {
+        <mat-error>Seleziona un conto</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoria</mat-label>
+      <mat-select formControlName="categoryId">
+        <mat-option value="">Nessuna</mat-option>
+        @for (cat of categories(); track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.icon }} {{ cat.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Note</mat-label>
+      <textarea matInput formControlName="notes" rows="2" placeholder="Opzionale"></textarea>
+    </mat-form-field>
+
+    @if (error) {
+      <p class="error-msg">{{ error }}</p>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annulla</button>
+  <button mat-flat-button color="primary"
+    form="addTxForm" type="submit"
+    [disabled]="form.invalid || saving">
+    @if (saving) {
+      <mat-spinner diameter="18" />
+    } @else {
+      Salva
+    }
+  </button>
+</mat-dialog-actions>
