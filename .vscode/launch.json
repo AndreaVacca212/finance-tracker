@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend (ASP.NET Core)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/FinanceTracker.Api/FinanceTracker.Api.csproj"
+    },
+    {
+      "name": "Frontend (Angular)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "ng",
+      "runtimeArgs": ["serve"],
+      "cwd": "${workspaceFolder}/finance-tracker-ui",
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "🚀 Full Stack",
+      "configurations": ["Backend (ASP.NET Core)", "Frontend (Angular)"]
+    }
+  ]
+}

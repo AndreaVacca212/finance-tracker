@@ -16,5 +16,6 @@ export class Shell {
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
     { label: 'Conti', icon: 'account_balance', route: '/accounts' },
     { label: 'Transazioni', icon: 'receipt_long', route: '/transactions' },
+    { label: 'Budget', icon: 'donut_large', route: '/budget' },
   ];
 }

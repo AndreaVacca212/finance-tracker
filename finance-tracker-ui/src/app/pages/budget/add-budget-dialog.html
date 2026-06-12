@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Nuovo budget</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" id="addBudgetForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoria *</mat-label>
+      <mat-select formControlName="categoryId">
+        @for (cat of categories(); track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.icon }} {{ cat.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('categoryId')?.hasError('required') && form.get('categoryId')?.touched) {
+        <mat-error>Seleziona una categoria</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Limite mensile *</mat-label>
+      <input matInput type="number" formControlName="limit" min="1" step="0.01" />
+      <span matTextPrefix>€&nbsp;</span>
+      @if (form.get('limit')?.hasError('min') && form.get('limit')?.touched) {
+        <mat-error>Il limite deve essere maggiore di 0</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="flex-2">
+        <mat-label>Mese *</mat-label>
+        <mat-select formControlName="month">
+          @for (m of months; track m.value) {
+            <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label>Anno *</mat-label>
+        <mat-select formControlName="year">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (error) {
+      <p class="error-msg">{{ error }}</p>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annulla</button>
+  <button mat-flat-button color="primary"
+    form="addBudgetForm" type="submit"
+    [disabled]="form.invalid || saving">
+    @if (saving) {
+      <mat-spinner diameter="18" />
+    } @else {
+      Salva
+    }
+  </button>
+</mat-dialog-actions>

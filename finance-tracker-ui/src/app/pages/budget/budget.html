@@ -1,0 +1,86 @@
+<div class="budget-page">
+  <div class="page-header">
+    <h1>Budget</h1>
+    <button mat-fab extended color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+      Nuovo budget
+    </button>
+  </div>
+
+  <!-- Filtri mese/anno -->
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Mese</mat-label>
+      <mat-select [value]="filterMonth()" (selectionChange)="filterMonth.set($event.value)">
+        @for (m of months; track m.value) {
+          <mat-option [value]="m.value">{{ m.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Anno</mat-label>
+      <mat-select [value]="filterYear()" (selectionChange)="filterYear.set($event.value)">
+        @for (y of years; track y) {
+          <mat-option [value]="y">{{ y }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="center"><mat-spinner /></div>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+    <div class="budget-grid">
+      @for (b of filteredBudgets(); track b.id) {
+        <mat-card class="budget-card" [class.over-budget]="b.isOverBudget">
+          <mat-card-header>
+            <span mat-card-avatar class="cat-icon">{{ b.category.icon }}</span>
+            <mat-card-title>{{ b.category.name }}</mat-card-title>
+            <mat-card-subtitle>
+              {{ months[b.month - 1].label }} {{ b.year }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="amounts">
+              <span class="spent">{{ b.spent | currency:'EUR':'symbol':'1.2-2':'it' }}</span>
+              <span class="limit">/ {{ b.limit | currency:'EUR':'symbol':'1.2-2':'it' }}</span>
+            </div>
+
+            <mat-progress-bar
+              [mode]="'determinate'"
+              [value]="progressValue(b)"
+              [color]="progressColor(b)" />
+
+            <div class="remaining" [class.over]="b.isOverBudget">
+              @if (b.isOverBudget) {
+                <mat-icon>warning</mat-icon>
+                Sforato di {{ (b.spent - b.limit) | currency:'EUR':'symbol':'1.2-2':'it' }}
+              } @else {
+                <mat-icon>check_circle</mat-icon>
+                Rimanente: {{ b.remaining | currency:'EUR':'symbol':'1.2-2':'it' }}
+              }
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button mat-icon-button color="warn"
+              [disabled]="deletingId() === b.id"
+              (click)="deleteBudget(b)">
+              @if (deletingId() === b.id) {
+                <mat-spinner diameter="20" />
+              } @else {
+                <mat-icon>delete</mat-icon>
+              }
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <p class="empty">Nessun budget per questo periodo. Aggiungine uno!</p>
+      }
+    </div>
+  }
+</div>

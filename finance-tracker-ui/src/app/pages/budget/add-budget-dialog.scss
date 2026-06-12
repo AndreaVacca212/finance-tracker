@@ -1,0 +1,21 @@
+.full-width { width: 100%; }
+
+.row {
+  display: flex;
+  gap: 12px;
+  .flex-2 { flex: 2; }
+  .flex-1 { flex: 1; }
+}
+
+.error-msg {
+  color: var(--mat-sys-error);
+  font-size: 0.85rem;
+}
+
+mat-dialog-content {
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px !important;
+}
